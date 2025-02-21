@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Automated Resume Screening</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    /* Global Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: radial-gradient(circle, #000 0%, #1b2735 100%);
+      overflow: hidden;
+      position: relative;
+      min-height: 100vh;
+      color: #fff;
+    }
+    /* Solar System Background Container */
+    .solar-system {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+    /* Sun positioned on the left side */
+    .sun {
+      position: absolute;
+      left: 150px;
+      top: 50%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, #ffdd00, #ff8c00);
+      border-radius: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 0 100px rgba(255,221,0,0.8);
+      z-index: 2;
+    }
+    /* Each orbit will pivot around the sun’s center (which is at 150px + half of sun’s width = 250px) */
+    .orbit {
+      position: absolute;
+      left: 250px; /* pivot point = sun center */
+      top: 50%;
+      transform-origin: 0 50%; /* left edge is fixed (sun's center) */
+      border: 1px dashed rgba(255,255,255,0.2);
+      border-radius: 50%;
+      animation: rotateOrbit linear infinite;
+      z-index: 1;
+    }
+    @keyframes rotateOrbit {
+      from { transform: translateX(0) rotate(0deg); }
+      to   { transform: translateX(0) rotate(360deg); }
+    }
+    /* Define 8 elliptical orbits with increasing widths (spanning from left to right) and heights */
+    .orbit.orbit1 { width: 50vw; height: 200px; animation-duration: 20s; }
+    .orbit.orbit2 { width: 55vw; height: 220px; animation-duration: 25s; }
+    .orbit.orbit3 { width: 60vw; height: 240px; animation-duration: 30s; }
+    .orbit.orbit4 { width: 65vw; height: 260px; animation-duration: 35s; }
+    .orbit.orbit5 { width: 70vw; height: 280px; animation-duration: 40s; }
+    .orbit.orbit6 { width: 75vw; height: 300px; animation-duration: 45s; }
+    .orbit.orbit7 { width: 80vw; height: 320px; animation-duration: 50s; }
+    .orbit.orbit8 { width: 85vw; height: 340px; animation-duration: 55s; }
+    /* Place each planet at the far right edge of its orbit */
+    .orbit .planet {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(50%, -50%);
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+    /* Different sizes and colors for planets */
+    .planet.planet1 { width: 10px; height: 10px; background: #a8a8a8; }
+    .planet.planet2 { width: 12px; height: 12px; background: #ff6f61; }
+    .planet.planet3 { width: 14px; height: 14px; background: #6a5acd; }
+    .planet.planet4 { width: 16px; height: 16px; background: #20b2aa; }
+    .planet.planet5 { width: 18px; height: 18px; background: #ff8c00; }
+    .planet.planet6 { width: 20px; height: 20px; background: #ffd700; }
+    .planet.planet7 { width: 22px; height: 22px; background: #7fffd4; }
+    .planet.planet8 { width: 24px; height: 24px; background: #00bfff; }
+    /* Blinking Stars - adding more stars for a denser background */
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      opacity: 0;
+      animation: blink 3s infinite ease-in-out;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 0.8; }
+    }
+    /* 15 Stars at various positions */
+    .star:nth-child(1) { width: 2px; height: 2px; top: 10%; left: 15%; animation-duration: 2s; }
+    .star:nth-child(2) { width: 3px; height: 3px; top: 20%; left: 70%; animation-duration: 3s; }
+    .star:nth-child(3) { width: 1.5px; height: 1.5px; top: 80%; left: 50%; animation-duration: 2.5s; }
+    .star:nth-child(4) { width: 2.5px; height: 2.5px; top: 60%; left: 30%; animation-duration: 3.5s; }
+    .star:nth-child(5) { width: 2px; height: 2px; top: 40%; left: 85%; animation-duration: 2.8s; }
+    .star:nth-child(6) { width: 3px; height: 3px; top: 75%; left: 80%; animation-duration: 3.2s; }
+    .star:nth-child(7) { width: 2px; height: 2px; top: 55%; left: 40%; animation-duration: 2.2s; }
+    .star:nth-child(8) { width: 1.5px; height: 1.5px; top: 15%; left: 65%; animation-duration: 3.8s; }
+    .star:nth-child(9) { width: 2px; height: 2px; top: 90%; left: 25%; animation-duration: 2.6s; }
+    .star:nth-child(10){ width: 2.5px; height: 2.5px; top: 35%; left: 10%; animation-duration: 3.1s; }
+    .star:nth-child(11){ width: 2px; height: 2px; top: 80%; left: 80%; animation-duration: 2.7s; }
+    .star:nth-child(12){ width: 1.5px; height: 1.5px; top: 25%; left: 30%; animation-duration: 3.4s; }
+    .star:nth-child(13){ width: 2px; height: 2px; top: 65%; left: 90%; animation-duration: 2.3s; }
+    .star:nth-child(14){ width: 2.5px; height: 2.5px; top: 50%; left: 60%; animation-duration: 3.6s; }
+    .star:nth-child(15){ width: 2px; height: 2px; top: 15%; left: 20%; animation-duration: 2.9s; }
+    /* Main Content Container with Glassmorphism */
+    .container {
+      position: relative;
+      z-index: 3;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 500px;
+      margin: 40px auto;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    h2 {
+      font-weight: 600;
+      font-size: 28px;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    label {
+      display: block;
+      text-align: left;
+      margin: 10px 0 5px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+      color: #333;
+      outline: none;
+      margin-bottom: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+    select:focus, textarea:focus {
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: linear-gradient(90deg, #ff512f, #dd2476);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #dd2476, #ff512f);
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 6px;
+      font-size: 16px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      display: none;
+      animation: fadeInResult 1s ease forwards;
+    }
+    @keyframes fadeInResult {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (max-width: 600px) {
+      .container {
+        width: 95%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Solar System Background -->
+  <div class="solar-system">
+    <!-- Sun on the left side -->
+    <div class="sun"></div>
+    <!-- 8 Orbits with Their Planets (all pivoting around the sun's center at 250px,50%) -->
+    <div class="orbit orbit1">
+      <div class="planet planet1"></div>
+    </div>
+    <div class="orbit orbit2">
+      <div class="planet planet2"></div>
+    </div>
+    <div class="orbit orbit3">
+      <div class="planet planet3"></div>
+    </div>
+    <div class="orbit orbit4">
+      <div class="planet planet4"></div>
+    </div>
+    <div class="orbit orbit5">
+      <div class="planet planet5"></div>
+    </div>
+    <div class="orbit orbit6">
+      <div class="planet planet6"></div>
+    </div>
+    <div class="orbit orbit7">
+      <div class="planet planet7"></div>
+    </div>
+    <div class="orbit orbit8">
+      <div class="planet planet8"></div>
+    </div>
+    <!-- 15 Blinking Stars -->
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+  </div>
+  
+  <!-- Main Content Container -->
+  <div class="container">
+    <h2>Automated Resume Screening</h2>
+    <form id="screeningForm">
+      <label for="jobCategory">Select Job Category:</label>
+      <select id="jobCategory" name="jobCategory" required>
+        <option value="">Choose a category</option>
+        <option value="Software Developer">Software Developer</option>
+        <option value="Data Scientist">Data Scientist</option>
+        <option value="Project Manager">Project Manager</option>
+        <option value="Cybersecurity">Cybersecurity</option>
+        <option value="Cloud Engineer">Cloud Engineer</option>
+        <option value="AI Engineer">AI Engineer</option>
+      </select>
+      <label for="resumeText">Paste Resume Text:</label>
+      <textarea id="resumeText" name="resumeText" placeholder="Enter resume details..." required></textarea>
+      <button type="submit">Screen Resume</button>
+    </form>
+    <div id="result" class="result"></div>
+  </div>
+  
+  <script>
+    document.getElementById('screeningForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const jobCategory = document.getElementById('jobCategory').value;
+      const resumeText = document.getElementById('resumeText').value;
+      const payload = {
+        category_label: jobCategory,
+        resume_text: resumeText
+      };
+      try {
+        const response = await fetch('http://127.0.0.1:5000/screen_resume', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<strong>Result:</strong> ${result.message}`;
+      } catch (error) {
+        const resultDiv = document.getElementById('result');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = `<strong>Error:</strong> ${error}`;
+      }
+    });
+  </script>
+</body>
+</html>

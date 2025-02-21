@@ -1,0 +1,6 @@
+2025-02-21 19:06:36,185 - Loaded dataset with 10 resumes.
+2025-02-21 19:06:36,189 - Model created using Naive Bayes with TF-IDF vectorization.
+2025-02-21 19:06:36,195 - Model training completed.
+2025-02-21 19:06:36,198 - Model accuracy: 0.00%
+2025-02-21 19:06:41,674 - Model saved to resume_screening_model.pkl
+2025-02-21 19:06:41,678 - Resume screening completed successfully.
